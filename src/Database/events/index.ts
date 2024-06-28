@@ -1,7 +1,8 @@
 import { DB_createEvent, object_creation_event } from "./createEvent";
-import { DB_fetchEvents } from "./fetchEvents";
+import { DB_fetchEvent, DB_fetchEvents } from "./fetchEvents";
 
 export default class eventsDb {
-    fetchEvents = (limit: number, cursor?: string) => DB_fetchEvents(limit, cursor);
+    fetchEvent = (id: string) => DB_fetchEvent(id);
+    fetchEvents = (limit: number, cursor?: string, search?: string) => DB_fetchEvents(limit, cursor, search);
     createEvent = (object: object_creation_event) => DB_createEvent(object);
 }
