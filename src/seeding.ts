@@ -58,7 +58,6 @@ const seedData = async () => {
                     }                    
                 }
             })
-            console.log(res);
         }
         
         console.log('Seeding completed.');

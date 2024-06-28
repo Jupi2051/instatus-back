@@ -6,10 +6,10 @@ export type API_Event = {
     object: OBJECT_TYPES,
     actor_id: string,
     group: string,
-    target_id: string,
+    target_id: string | null,
     location: string,
     occurred_at: Date,
-    metadata: null,
+    metadata: null | Object,
     action_id: string,
     action: {
         id: string,
@@ -25,12 +25,14 @@ export type API_Event = {
         id: string,
         name: string,
         email: string
-    }
+    } | null
 }
 
 export default function BroadcoastNewEvent(event: API_Event)
 {
+    console.log("attempting broadcast");
     wsServer.clients.forEach((client) => {
+        console.log("broadcast.");
         client.send(JSON.stringify(event));
     })    
 }

@@ -10,7 +10,7 @@ export const createEventBody = z.object({
     target_id: z.string().optional(),
     action_id: z.string(),
     location: z.string().ip({version: "v4"}),
-    occured_at: z.date(),
+    occurred_at: z.coerce.date(),
     metadata: z.record(z.string().or(z.boolean()).or(z.number()))
 });
 
