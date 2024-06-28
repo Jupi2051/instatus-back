@@ -20,7 +20,7 @@ export async function DB_fetchEvents(limit: number, cursor?: string, searchAndFi
         skip: cursor? 1 : undefined, // skip the cursor if we have it.
         orderBy: [
             {
-                id: "desc",
+                occurred_at: "desc",
             },
         ],
         where: {
