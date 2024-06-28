@@ -1,5 +1,5 @@
 import { OBJECT_TYPES } from "@prisma/client"
-import { wsServer } from "./Server"
+import { wsServer } from "../.."
 
 export type API_Event = {
     id: string,

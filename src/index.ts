@@ -5,7 +5,8 @@ import 'dotenv/config';
 import apiRoutes from "./API/Routes/apiRoutesWithVersions";
 import { events } from './Database';
 import helmet from 'helmet';
-import beginWebsocketServer from './API/Sockets/Server';
+import http from "http";
+import { WebSocketServer } from 'ws';
 
 export const eventsDb = new events();
 const app = express();
@@ -21,8 +22,12 @@ app.use(apiRoutes);
 app.all("*", (_, res) => res.status(404).send("This route was not found."));
 
 // Server activation
-app.listen(PORT, () => {
+const server = http.createServer(app);
+export const wsServer = new WebSocketServer({ server: server });
+wsServer.on("connection", (client) => {
+  console.log(`client connected ` + client.readyState);
+})
+
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-beginWebsocketServer()
