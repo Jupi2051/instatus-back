@@ -1,7 +1,19 @@
 import prisma from "../Database";
 
+export type eventsFiltersAndSearch = {
+    actor_id?: string,
+    target_id?: string,
+    action_id?: string,
+
+    actor_name?: string,
+    target_name?: string,
+    action_name?: string
+
+    search?: string
+}
+
 //This uses cursor based pagination to scale and have a much more efficent performance.
-export async function DB_fetchEvents(limit: number, cursor?: string, search?: string)
+export async function DB_fetchEvents(limit: number, cursor?: string, searchAndFilters?: eventsFiltersAndSearch)
 {
     const result = await prisma.event.findMany({
         take: limit,
@@ -13,16 +25,18 @@ export async function DB_fetchEvents(limit: number, cursor?: string, search?: st
         ],
         where: {
             OR: [
-                {
-                    Actor: {name: {contains: search}}
-                },
-                {
-                    Actor: {email: {contains: search}}
-                },
-                {
-                    action: {name: {contains: search}}
-                },
+                {Actor: {name: {contains: searchAndFilters?.search}}},
+                {action: {name: {contains: searchAndFilters?.search}}},
+                {Actor: {email: {contains: searchAndFilters?.search}}},
+
                 
+                {Actor: {name: {contains: searchAndFilters?.actor_name}}},
+                {target: {name: {contains: searchAndFilters?.target_name}}},
+                {action: {name: {contains: searchAndFilters?.action_name}}},
+
+                {target_id: searchAndFilters?.target_id},
+                {action_id: searchAndFilters?.action_id},
+                {actor_id: searchAndFilters?.actor_id},
             ]
         },
         include: {

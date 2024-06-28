@@ -8,7 +8,15 @@ export const getEventsBody = z.object({
         message: "Invalid KSULID format. It should have segments separated by '_' and ending with alphanumeric characters.",
       }).optional(),
     limit: z.coerce.number().min(0).max(100).default(10),
-    search: z.string().optional()
+    search: z.string().optional(),
+
+    actor_id: z.string().regex(/^(?:[a-zA-Z0-9]+_)+[a-zA-Z0-9]+$/).optional(),
+    target_id: z.string().regex(/^(?:[a-zA-Z0-9]+_)+[a-zA-Z0-9]+$/).optional(),
+    action_id: z.string().regex(/^(?:[a-zA-Z0-9]+_)+[a-zA-Z0-9]+$/).optional(),
+
+    actor_name: z.string().optional(),
+    target_name: z.string().optional(),
+    action_name: z.string().optional()
 });
 
 export async function GetEvents(req: Request, res: Response)
@@ -17,7 +25,7 @@ export async function GetEvents(req: Request, res: Response)
     {
         const queryBody = getEventsBody.parse(req.query); // guaranteed to have the queryType type thanks to the bodyValidator middleware.
 
-        const latestEvents = await eventsDb.fetchEvents(queryBody.limit, queryBody.cursor, queryBody.search === ""? undefined : queryBody.search);
+        const latestEvents = await eventsDb.fetchEvents(queryBody.limit, queryBody.cursor, queryBody);
         let lastValue = null;
 
         if (latestEvents.length > 0)
