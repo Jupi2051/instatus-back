@@ -11,24 +11,22 @@ export async function DB_createEvent(event: object_creation_event)
 {
     try
     {
-        const id = KSUID.randomSync(new Date()).string; // generate ksuid for time of now.
+        const id = KSUID.randomSync(event.occured_at).string; // generate ksuid for time of now.
 
         const result = await prisma.event.create({
             data: {
                 id: `evt_${id}`,
                 location: event.location,
-                object: event.object,
+                object: "event",
                 action: {
-                    create: event.action
+                    connect: {id: event.action_id}
                 },
-                occurred_at: new Date(),
+                occurred_at: event.occured_at,
                 group: event.group,
                 Actor: {
-                    create: event.actor
+                    connect: {id: event.actor_id}
                 },
-                target: event.target? {
-                    create: event.target
-                } : undefined
+                target: event.target_id? {connect: {id: event.target_id}} : undefined,
             }
         });
 

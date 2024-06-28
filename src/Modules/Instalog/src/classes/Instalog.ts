@@ -1,14 +1,23 @@
+import axios, { Axios } from "axios";
+import { eventsFiltersAndSearch, listEvents } from "../functions/listEvents";
+import { ActionType, createEvent, createEventData } from "../functions/createEvent";
+
 class Instalog {
-    public SECRET_KEY: string;
     private API_URL: string = "http://localhost:5000";
+    private client: Axios;
 
     constructor (SECRET_KEY: string) {
-        this.SECRET_KEY = SECRET_KEY;
+        this.client = axios.create({
+            baseURL: this.API_URL,
+            headers: {
+                Authorization: `Bearer ${SECRET_KEY}`
+            }
+        });
     }
 
-    createEvent = () => undefined;
+    createEvent = async (action: ActionType, event: createEventData) => createEvent(this.client, action, event);
 
-    listEvents = () => undefined
+    listEvents = async (filters?: eventsFiltersAndSearch, limit?: number, cursor?: string) => await listEvents(this.client, filters, limit, cursor)
 }
 
 export default Instalog;

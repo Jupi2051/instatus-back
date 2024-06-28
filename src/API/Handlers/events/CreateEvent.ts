@@ -5,37 +5,12 @@ import { eventsDb } from "../../..";
 import { respondWithError } from "../../Routes/v1/errorHandling";
 
 export const createEventBody = z.object({
-    object: z.nativeEnum(OBJECT_TYPES),
-
     actor_id: z.string(),
-    actor_name: z.string(),
-
     group: z.string(),
-
-    target_id: z.string(),
-    target_name: z.string(),
-
+    target_id: z.string().optional(),
+    action_id: z.string(),
     location: z.string().ip({version: "v4"}),
     occured_at: z.date(),
-
-    actor: z.object({
-        id: z.string().ulid(),
-        name: z.string(),
-        email: z.string().email()
-    }),
-
-    target: z.object({
-        id: z.string().ulid(),
-        name: z.string(),
-        email: z.string().email()
-    }).optional(),
-
-    action: z.object({
-        id: z.string().ulid(),
-        object: z.nativeEnum(OBJECT_TYPES),
-        name: z.string().min(0).max(4096)
-    }),
-
     metadata: z.record(z.string().or(z.boolean()).or(z.number()))
 });
 
