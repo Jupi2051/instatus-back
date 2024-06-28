@@ -25,19 +25,16 @@ export async function DB_fetchEvents(limit: number, cursor?: string, searchAndFi
         ],
         where: {
             OR: [
-                {Actor: {name: {contains: searchAndFilters?.search}}},
-                {action: {name: {contains: searchAndFilters?.search}}},
-                {Actor: {email: {contains: searchAndFilters?.search}}},
-
-                
-                {Actor: {name: {contains: searchAndFilters?.actor_name}}},
-                {target: {name: {contains: searchAndFilters?.target_name}}},
-                {action: {name: {contains: searchAndFilters?.action_name}}},
-
-                {target_id: searchAndFilters?.target_id},
-                {action_id: searchAndFilters?.action_id},
-                {actor_id: searchAndFilters?.actor_id},
-            ]
+                { Actor: { name: { contains: searchAndFilters?.search } } },
+                { action: { name: { contains: searchAndFilters?.search } } },
+                { Actor: { email: { contains: searchAndFilters?.search } } },
+            ],
+            ...(searchAndFilters?.actor_name && { Actor: { name: { contains: searchAndFilters.actor_name } } }),
+            ...(searchAndFilters?.target_name && { target: { name: { contains: searchAndFilters.target_name } } }),
+            ...(searchAndFilters?.action_name && { action: { name: { contains: searchAndFilters.action_name } } }),
+            ...(searchAndFilters?.target_id && { target_id: searchAndFilters.target_id }),
+            ...(searchAndFilters?.action_id && { action_id: searchAndFilters.action_id }),
+            ...(searchAndFilters?.actor_id && { actor_id: searchAndFilters.actor_id }),
         },
         include: {
             action: true,

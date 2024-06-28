@@ -24,7 +24,6 @@ export async function GetEvents(req: Request, res: Response)
     try
     {
         const queryBody = getEventsBody.parse(req.query); // guaranteed to have the queryType type thanks to the bodyValidator middleware.
-
         const latestEvents = await eventsDb.fetchEvents(queryBody.limit, queryBody.cursor, queryBody);
         let lastValue = null;
 
