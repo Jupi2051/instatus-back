@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,33 +8,49 @@ datasource db {
 }
 
 model Event {
-  id String @id
+  id String @id // store a KSUID
 
   object OBJECT_TYPES
 
-  actor_id   String
-  actor_name String
+  actor_id String
 
   group String
 
-  target_id   String
-  target_name String
+  target_id String?
 
   location    String
   occurred_at DateTime
-  metadata    Json
+  metadata    Json?
 
   action_id String
-  action    EventAction @relation(fields: [action_id], references: [id])
+
+  action EventAction @relation(fields: [action_id], references: [id])
+  target Target?     @relation(fields: [target_id], references: [id])
+  Actor  Actor       @relation(fields: [actor_id], references: [id])
+}
+
+model Target {
+  id    String  @id
+  name  String
+  email String
+  Event Event[]
+}
+
+model Actor {
+  id    String  @id
+  name  String
+  email String
+  Event Event[]
 }
 
 model EventAction {
-  id     String  @id
-  object String
+  id     String       @id
+  object OBJECT_TYPES
   name   String
   events Event[]
 }
 
 enum OBJECT_TYPES {
   event
+  event_action
 }
