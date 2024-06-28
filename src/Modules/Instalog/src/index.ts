@@ -1,0 +1,1 @@
+export {default as Instalog} from "./classes/Instalog";
